@@ -1,0 +1,4 @@
+com\batch\App.class
+com\batch\ReportFieldSetMapper.class
+com\batch\Report.class
+com\batch\CustomerItemProcessor.class
