@@ -1,0 +1,9 @@
+app:
+  name: spring-retrieve-properties
+  version: 3.0
+  details:
+    owner: Raghavendra Vaddi
+    email: vaddiraghava123@gmail.com
+  endpoints:
+    -/prop/config
+    - /yml/config
