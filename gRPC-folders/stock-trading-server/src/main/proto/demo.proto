@@ -1,0 +1,45 @@
+syntax ="proto3";
+
+option java_multiple_files=true;
+option java_package="com.vaddi.employee";
+option java_outer_classname="EmployeeProto";
+
+
+import "google/protobuf/timestamp.proto";
+
+package com.vaddi.employee;
+
+//Input Employee
+message Employee{
+  int32 id=1;
+  string name=2;
+  double salary=3;
+  repeated Department departments=4;
+  map<string,string> addressMap=5;
+  bool  isActive=6;
+  bytes profilePicture=7;
+  google.protobuf.Timestamp joinDate=8;
+}
+
+message Department{
+	int32 id =1;
+	string name=2;
+}
+
+message Empty{ }
+
+message EmployeeList{
+	
+	repeated Employee employees=1;
+}
+
+//service
+service EmployeeService {
+	
+	rpc getEmployee(Employee) returns(Employee);
+	
+	rpc addEmployee(Employee) returns(Employee);
+	
+	rpc getAllEmployees(Empty) returns(EmployeeList);
+
+}
