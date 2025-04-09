@@ -26,4 +26,4 @@ QueryHints annotation-- Perform database performance and optimization in query
 
 ### After  QueryHints : Taken time in 308ms
 	2025-04-09T15:29:05.315-04:00 DEBUG 5896 --- [spring-query-hint] [nio-8080-exec-3] o.h.stat.internal.StatisticsImpl         
- : HHH000117: HQL: [CRITERIA] select e1_0.id,e1_0.dept,e1_0.email,e1_0.gender,e1_0.name,e1_0.salary from employee e1_0 where e1_0.salary>?, time: 308ms, rows: 77644
+ 	: HHH000117: HQL: [CRITERIA] select e1_0.id,e1_0.dept,e1_0.email,e1_0.gender,e1_0.name,e1_0.salary from employee e1_0 where e1_0.salary>?, time: 308ms, rows: 77644
