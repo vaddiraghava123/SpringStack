@@ -1,0 +1,51 @@
+openapi: 3.0.3
+
+info:
+  title: Customer API
+  version: 1.0.1
+
+security:
+  - NgrokBypass: []
+
+paths:
+  /api/v1/customers/{id}:
+    get:
+      tags:
+        - Customers
+      operationId: getCustomerById
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+
+components:
+  securitySchemes:
+    NgrokBypass:
+      type: apiKey
+      in: header
+      name: ngrok-skip-browser-warning
+      description: Required to bypass ngrok browser protection
+
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        newaddress:
+          type: string

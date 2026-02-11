@@ -1,0 +1,6 @@
+README.md
+pom.xml
+src/main/java/com/vaddi/openapispec/api/ApiApi.java
+src/main/java/com/vaddi/openapispec/api/ApiUtil.java
+src/main/java/com/vaddi/openapispec/model/Customer.java
+src/main/java/com/vaddi/openapispec/model/Error.java
