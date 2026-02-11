@@ -47,5 +47,5 @@ components:
           type: string
         email:
           type: string
-        newaddresse:
+        newaddress:
           type: string
