@@ -141,8 +141,7 @@
 								<argument>
 									${project.basedir}/src/main/resources/customer-api.yaml</argument>
 								<argument>--key</argument>
-								<argument>
-									<<RDME KEY>></argument>
+								<argument></argument>
 								<argument>--slug</argument>
 								<argument>customer-api</argument>
 							</arguments>
