@@ -80,7 +80,7 @@
 									${project.basedir}/src/main/resources/customer-api.yaml</argument>
 								<argument>--key</argument>
 								<argument>
-									2wDw2HiOT1L6jaCsZHhlk3eRauu_6g3KpQA3yaAjwk9JRGV4Z</argument>
+									<<RDME KEY>></argument>
 								<argument>--slug</argument>
 								<argument>customer-api-2.0</argument>
 							</arguments>
@@ -142,7 +142,7 @@
 									${project.basedir}/src/main/resources/customer-api.yaml</argument>
 								<argument>--key</argument>
 								<argument>
-									rdme_xn8s9hd3fb434e3ac67809732f74631665b39e681eef708b95fb22510797f73102260d</argument>
+									<<RDME KEY>></argument>
 								<argument>--slug</argument>
 								<argument>customer-api</argument>
 							</arguments>
