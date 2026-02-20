@@ -80,7 +80,7 @@
 									${project.basedir}/src/main/resources/customer-api.yaml</argument>
 								<argument>--key</argument>
 								<argument>
-									<<RDME KEY>></argument>
+									<<RDME KEY>> </argument>
 								<argument>--slug</argument>
 								<argument>customer-api-2.0</argument>
 							</arguments>
