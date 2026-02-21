@@ -1,7 +1,7 @@
 # SpringStack
 Spring modules
 
-Git hub action - new
+Git hub action - Testing
   > Repo → Settings → Actions → General
   <img width="1030" height="539" alt="image" src="https://github.com/user-attachments/assets/256bc5d6-13e4-48af-8fad-b916a3ef84ea" />
 
