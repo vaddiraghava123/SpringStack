@@ -1,3 +1,3 @@
 # SpringStack
 Spring modules
-Git hub action
+Git hub actions
