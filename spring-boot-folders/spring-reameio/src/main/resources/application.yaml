@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: spring-reameio
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+server:
+  port: 8080
+app:
+  server-url: http://localhost:8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+app:
+  server-url: https://dev.api.mycompany.com
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+app:
+  server-url: https://api.mycompany.com
