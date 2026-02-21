@@ -1,0 +1,115 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+
+    env = project.findProperty("env") ?: "local"
+
+    activeProfile = project.findProperty("${env}.profile")
+    apiBaseUrl    = project.findProperty("${env}.baseUrl")
+
+    if (activeProfile == null) {
+        throw new GradleException("Profile not defined for environment: ${env}")
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.register("generateOpenApiYaml") {
+
+    group = "documentation"
+    description = "Generates OpenAPI YAML for ${env}"
+
+    dependsOn("bootJar")
+
+    doLast {
+
+        println "Environment: ${env}"
+        println "Spring profile: ${activeProfile}"
+
+        File outputDir = file("$buildDir/docs")
+        outputDir.mkdirs()
+
+        File outputFile = new File(outputDir, "openapi-${env}.yml")
+
+        String apiEndpoint
+        Process process = null
+
+        if (apiBaseUrl) {
+
+            apiEndpoint = "${apiBaseUrl}/v3/api-docs.yaml"
+            println "Fetching from remote server: ${apiEndpoint}"
+
+        } else {
+
+            println "Starting Spring Boot locally..."
+
+            def socket = new ServerSocket(0)
+            int freePort = socket.localPort
+            socket.close()
+
+            def bootJarFile = tasks.bootJar.archiveFile.get().asFile
+
+            process = new ProcessBuilder(
+                    "java",
+                    "-Dspring.profiles.active=${activeProfile}",
+                    "-Dserver.port=${freePort}",
+                    "-jar",
+                    bootJarFile.absolutePath
+            )
+                    .redirectErrorStream(true)
+                    .inheritIO()
+                    .start()
+
+            apiEndpoint = "http://localhost:${freePort}/v3/api-docs.yaml"
+			println "ApiEndpoint .. ${apiEndpoint}" 
+            int maxAttempts = 60
+            int attempts = 0
+            boolean ready = false
+
+            while (attempts < maxAttempts && !ready) {
+                try {
+                    new URL(apiEndpoint).text
+                    ready = true
+                } catch (Exception ignored) {
+                    sleep(2000)
+                    attempts++
+                }
+            }
+
+            if (!ready) {
+                process.destroy()
+                throw new GradleException("Application did not start in time")
+            }
+        }
+
+        outputFile.text = new URL(apiEndpoint).text
+        println "OpenAPI generated at: ${outputFile.absolutePath}"
+
+        if (process != null) {
+            process.destroy()
+        }
+    }
+}
+
+tasks.named("build") {
+    dependsOn("generateOpenApiYaml")
+}

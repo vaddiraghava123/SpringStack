@@ -1,0 +1,21 @@
+openapi: 3.0.1
+info:
+  title: Hello REST API
+  description: Sample Hello REST Service
+  version: "1.0"
+servers:
+- url: https://api.mycompany.com
+paths:
+  /hello:
+    get:
+      tags:
+      - hello-services
+      operationId: sayHello
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components: {}
