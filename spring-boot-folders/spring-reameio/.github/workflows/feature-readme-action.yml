@@ -1,0 +1,48 @@
+name: Create TXT when README modified
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+    paths:
+      - 'README.md'
+
+jobs:
+  create-file:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # Required to push commit
+
+    if: github.actor != 'github-actions[bot]'   # Prevent infinite loop
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check if README file changed
+        id: README_MD
+        run: |
+          git diff --name-only HEAD~1 HEAD > changed_files.txt
+          
+          if grep -q "README.md" changed_files.txt; then
+            echo "README_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "README_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Show change status
+        run: echo "README changed? $README_CHANGED"
+
+      - name: Create sample.txt
+        if: env.README_CHANGED == 'true'
+        run: echo "Hello Raghava" > sample.txt
+
+      - name: Commit and push file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add sample.txt
+          git commit -m "Auto-create sample.txt [skip ci]"
+          git push
