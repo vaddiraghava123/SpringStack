@@ -11,11 +11,8 @@ jobs:
   create-file:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-
     permissions:
-      contents: write   # Required to push commit
-
-    if: github.actor != 'github-actions[bot]'   # Prevent infinite loop
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -23,28 +20,32 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.ref }}
-      - name: Check if README file changed
-        id: README_MD
+
+      - name: Check if README changed
+        id: check
         run: |
-          git diff --name-only HEAD~1 HEAD > changed_files.txt
-          
-          if grep -q "README.md" changed_files.txt; then
-            echo "README_CHANGED=true" >> $GITHUB_ENV
+          if git diff --quiet HEAD~1 HEAD -- README.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
           else
-            echo "README_CHANGED=false" >> $GITHUB_ENV
+            echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Show change status
-        run: echo "README changed? $README_CHANGED"
-
       - name: Create sample.txt
-        if: env.README_CHANGED == 'true'
+        echo "changed value? $changed"
+        if: steps.check.outputs.changed == 'true'
         run: echo "Hello Raghava" > sample.txt
 
-      - name: Commit and push file
+      - name: Commit and push file safely
+        if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions@users.noreply.github.com"
+
           git add sample.txt
-          git commit -m "Auto-create sample.txt [skip ci]"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-create sample.txt [skip ci]"
+            git push
+          fi
